@@ -1,12 +1,10 @@
-## My Project
+# Hibernate with Aurora DSQL
 
-TODO: Fill this README out!
+This repository contains the associated examples and dialect code for working with Aurora DSQL.
 
-Be sure to:
+## Getting Started
 
-* Change the title in this README
-* Edit your repository description on GitHub
-* Write in your license below and create a LICENSE file
+To run included example please refer to [README](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/examples/pet-clinic-app/README.md).
 
 ## Security
 
@@ -14,5 +12,6 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 ## License
 
-This library is licensed under the LICENSE NAME HERE License.
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
+SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
