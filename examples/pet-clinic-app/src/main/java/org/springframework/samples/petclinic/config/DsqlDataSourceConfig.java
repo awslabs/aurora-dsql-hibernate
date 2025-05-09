@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dsql.DsqlUtilities;
@@ -35,7 +36,7 @@ public class DsqlDataSourceConfig {
 	@Value("${app.dsql.token.refresh-rate:1800000}")
 	private long maxLifetime;
 
-	@Value("${app.dsql.username:admin}")
+	@Value("${app.datasource.username:admin}")
 	private String username;
 
 	private HikariDataSource dataSource;
@@ -57,6 +58,7 @@ public class DsqlDataSourceConfig {
 		// Set the schema based on user type
 		if (!username.equals("admin")) {
 			hds.addDataSourceProperty("currentSchema", "myschema");
+			logger.info("Set schema to myschema");
 		}
 
 		// set the password by generating token from credentials.
@@ -67,10 +69,13 @@ public class DsqlDataSourceConfig {
 	@Scheduled(fixedRateString = "${app.dsql.token.refresh-interval:600000}")
 	public void generateToken() {
 		// Generate and set the DSQL token
+		logger.info("Region: " + region);
 		final DsqlUtilities utilities = DsqlUtilities.builder()
 			.region(Region.of(region.toLowerCase()))
-			.credentialsProvider(ProfileCredentialsProvider.create())
+			.credentialsProvider(DefaultCredentialsProvider.create())
 			.build();
+
+		logger.info("Generating DSQL token for user:" + username);
 
 		final Consumer<GenerateAuthTokenRequest.Builder> requester = builder -> builder
 			.hostname(dataSource.getJdbcUrl().split("/")[2])
@@ -81,6 +86,8 @@ public class DsqlDataSourceConfig {
 		// "admin".
 		final String token = username.equals("admin") ? utilities.generateDbConnectAdminAuthToken(requester)
 				: utilities.generateDbConnectAuthToken(requester);
+
+		logger.info("Using this token: " + token);
 
 		dataSource.setPassword(token);
 		logger.info("Generated DSQL token");
