@@ -28,7 +28,7 @@
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
     <!-- AWS SDK version -->
-    <aws.sdk.version>2.31.33</aws.sdk.version>
+    <aws.sdk.version>2.31.39</aws.sdk.version>
 
     <checkstyle.version>10.18.1</checkstyle.version>
     <jacoco.version>0.8.12</jacoco.version>
