@@ -49,11 +49,11 @@ jobs:
         aws-region: us-east-1
 
     - name: Configure and run integration for pgjdbc - admin
-      working-directory: ./examples
-      env:
-        CLUSTER_ENDPOINT: ${{ secrets.JAVA_PGJDBC_CLUSTER_ENDPOINT }}
-        CLUSTER_USER: admin
-        REGION: ${{ secrets.JAVA_PGJDBC_CLUSTER_REGION }}
+      working-directory: ./examples/pet-clinic-app
+ #     env:
+ #       CLUSTER_ENDPOINT: ${{ secrets.JAVA_PGJDBC_CLUSTER_ENDPOINT }}
+ #       CLUSTER_USER: admin
+ #       REGION: ${{ secrets.JAVA_PGJDBC_CLUSTER_REGION }}
       run: |
         mvn validate
         mvn initialize
