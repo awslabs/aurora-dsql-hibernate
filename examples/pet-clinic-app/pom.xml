@@ -218,11 +218,11 @@
             <include>**/CrashControllerIntegrationTests.java</include>
             <include>**/CrashControllerTests.java</include>
             <include>**/VetTests.java</include>
-            <include>**/PostgresIntegrationTests.java</include>
           </includes>
           <excludes>
              <!-- Disabled this tests as it relies on sql statement not supported by H2. -->
             <exclude>**/ClinicServiceTests.java</exclude>
+            <include>**/PostgresIntegrationTests.java</include>
           </excludes>
         </configuration>
       </plugin>
