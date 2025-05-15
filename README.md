@@ -50,6 +50,6 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 ## License
 
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
-// SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
+SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
