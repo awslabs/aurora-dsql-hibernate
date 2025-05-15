@@ -16,7 +16,6 @@ This repository contains the associated examples and dialect code for working wi
 
   ```bash
   java -version
-
   ```
 
 - Build Tool (Maven or Gradle)
