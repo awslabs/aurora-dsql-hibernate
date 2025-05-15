@@ -6,10 +6,6 @@ This repository contains the associated examples and dialect code for working wi
 
 ## Requirements
 
-- You must have an AWS account, and have your default credentials and AWS Region
-  configured as described in the
-  [Globally configuring AWS SDKs and tools](https://docs.aws.amazon.com/credref/latest/refdocs/creds-config-files.html)
-  guide.
 - Java Development Kit (JDK): Ensure you have JDK 17+ installed.
 
   _To verify the java is installed, you can run_
