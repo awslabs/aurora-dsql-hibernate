@@ -1,5 +1,3 @@
-## My Project
-
 # Aurora DSQL dialect for Hibernate
 
 This repository contains the associated examples and dialect code for working with Aurora DSQL.
