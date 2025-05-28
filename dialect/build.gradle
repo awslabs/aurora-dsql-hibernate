@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.amazon'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.hibernate:hibernate-core:6.6.0.Final")
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': 'AWS DSQL Hibernate',
+                'Implementation-Version': version
+        )
+    }
+}
