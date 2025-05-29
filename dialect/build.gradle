@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
 plugins {
     id 'java'
 }
@@ -10,7 +12,15 @@ repositories {
 }
 
 dependencies {
-    implementation("org.hibernate:hibernate-core:6.6.0.Final")
+    implementation("org.hibernate:hibernate-core:6.2.0.Final")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testImplementation("org.mockito:mockito-core:5.3.1")
+}
+
+test {
+    useJUnitPlatform()
 }
 
 jar {

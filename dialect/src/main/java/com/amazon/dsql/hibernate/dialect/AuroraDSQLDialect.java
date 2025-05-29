@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
 package com.amazon.dsql.hibernate.dialect;
 
 import jakarta.persistence.TemporalType;
@@ -9,21 +11,14 @@ import org.hibernate.boot.model.FunctionContributions;
 import org.hibernate.boot.model.TypeContributions;
 import org.hibernate.boot.model.relational.SqlStringGenerationContext;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.DmlTargetColumnQualifierSupport;
-import org.hibernate.dialect.FunctionalDependencyAnalysisSupport;
-import org.hibernate.dialect.FunctionalDependencyAnalysisSupportImpl;
 import org.hibernate.dialect.NationalizationSupport;
 import org.hibernate.dialect.OracleDialect;
 import org.hibernate.dialect.PgJdbcHelper;
-import org.hibernate.dialect.PostgreSQLArrayJdbcTypeConstructor;
 import org.hibernate.dialect.PostgreSQLCastingInetJdbcType;
 import org.hibernate.dialect.PostgreSQLCastingIntervalSecondJdbcType;
 import org.hibernate.dialect.PostgreSQLCastingJsonJdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
-import org.hibernate.dialect.PostgreSQLOrdinalEnumJdbcType;
 import org.hibernate.dialect.PostgreSQLSqlAstTranslator;
 import org.hibernate.dialect.PostgreSQLStructCastingJdbcType;
-import org.hibernate.dialect.PostgreSQLUUIDJdbcType;
 import org.hibernate.dialect.Replacer;
 import org.hibernate.dialect.SelectItemReferenceStrategy;
 import org.hibernate.dialect.TimeZoneSupport;
@@ -68,27 +63,29 @@ import org.hibernate.sql.ast.spi.SqlAppender;
 import org.hibernate.sql.ast.spi.StandardSqlAstTranslatorFactory;
 import org.hibernate.sql.ast.tree.Statement;
 import org.hibernate.sql.exec.spi.JdbcOperation;
-import org.hibernate.tool.schema.extract.spi.ColumnTypeInformation;
 import org.hibernate.tool.schema.internal.StandardForeignKeyExporter;
 import org.hibernate.tool.schema.spi.Exporter;
 import org.hibernate.type.JavaObjectType;
+import org.hibernate.type.descriptor.ValueBinder;
+import org.hibernate.type.descriptor.WrapperOptions;
+import org.hibernate.type.descriptor.java.JavaType;
 import org.hibernate.type.descriptor.java.PrimitiveByteArrayJavaType;
+import org.hibernate.type.descriptor.jdbc.BasicBinder;
 import org.hibernate.type.descriptor.jdbc.BlobJdbcType;
 import org.hibernate.type.descriptor.jdbc.ClobJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.ObjectNullAsBinaryTypeJdbcType;
-import org.hibernate.type.descriptor.jdbc.SqlTypedJdbcType;
+import org.hibernate.type.descriptor.jdbc.UUIDJdbcType;
 import org.hibernate.type.descriptor.jdbc.XmlJdbcType;
 import org.hibernate.type.descriptor.jdbc.spi.JdbcTypeRegistry;
 import org.hibernate.type.descriptor.sql.internal.DdlTypeImpl;
-import org.hibernate.type.descriptor.sql.internal.NamedNativeEnumDdlTypeImpl;
-import org.hibernate.type.descriptor.sql.internal.NamedNativeOrdinalEnumDdlTypeImpl;
 import org.hibernate.type.descriptor.sql.internal.Scale6IntervalSecondDdlType;
 import org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry;
 import org.hibernate.type.spi.TypeConfiguration;
 
 import java.sql.CallableStatement;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -97,10 +94,10 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import static org.hibernate.query.sqm.TemporalUnit.DAY;
 import static org.hibernate.query.sqm.TemporalUnit.EPOCH;
-import static org.hibernate.type.SqlTypes.ARRAY;
 import static org.hibernate.type.SqlTypes.BINARY;
 import static org.hibernate.type.SqlTypes.BLOB;
 import static org.hibernate.type.SqlTypes.CHAR;
@@ -128,7 +125,6 @@ import static org.hibernate.type.SqlTypes.UUID;
 import static org.hibernate.type.SqlTypes.VARBINARY;
 import static org.hibernate.type.SqlTypes.VARCHAR;
 import static org.hibernate.type.descriptor.DateTimeUtils.appendAsDate;
-import static org.hibernate.type.descriptor.DateTimeUtils.appendAsLocalTime;
 import static org.hibernate.type.descriptor.DateTimeUtils.appendAsTime;
 import static org.hibernate.type.descriptor.DateTimeUtils.appendAsTimestampWithMicros;
 import static org.hibernate.type.descriptor.DateTimeUtils.appendAsTimestampWithMillis;
@@ -158,9 +154,45 @@ public class AuroraDSQLDialect extends Dialect {
         }
     };
 
+    private static final IdentityColumnSupportImpl NO_IDENTITY_COLUMN_SUPPORT = new IdentityColumnSupportImpl() {
+        @Override
+        public boolean supportsIdentityColumns() {
+            return false;
+        }
+    };
+
+    // Taken from PostgreSQLUUIDJdbcType.java in Hibernate 7.0 and added here as the class didn't exist yet in 6.2
+    private static final JdbcType PG_UUID_JDBC_TYPE = new UUIDJdbcType() {
+        public <X> ValueBinder<X> getBinder(JavaType<X> javaType) {
+            return new BasicBinder<>( javaType, this ) {
+                @Override
+                protected void doBindNull(PreparedStatement st, int index, WrapperOptions options) throws SQLException {
+                    st.setNull( index, getJdbcType().getJdbcTypeCode(), "uuid" );
+                }
+
+                @Override
+                protected void doBindNull(CallableStatement st, String name, WrapperOptions options) throws SQLException {
+                    st.setNull( name, getJdbcType().getJdbcTypeCode(), "uuid" );
+                }
+
+                @Override
+                protected void doBind(PreparedStatement st, X value, int index, WrapperOptions options)
+                        throws SQLException {
+                    st.setObject( index, getJavaType().unwrap( value, UUID.class, options ) );
+                }
+
+                @Override
+                protected void doBind(CallableStatement st, X value, String name, WrapperOptions options)
+                        throws SQLException {
+                    st.setObject( name, getJavaType().unwrap( value, UUID.class, options ) );
+                }
+            };
+        }
+    };
+
     @Override
     public IdentityColumnSupport getIdentityColumnSupport() {
-        return IdentityColumnSupportImpl.INSTANCE;
+        return NO_IDENTITY_COLUMN_SUPPORT;
     }
 
     @Override
@@ -185,11 +217,6 @@ public class AuroraDSQLDialect extends Dialect {
 
     @Override
     public boolean supportsAlterColumnType() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsUpdateReturning() {
         return false;
     }
 
@@ -244,11 +271,6 @@ public class AuroraDSQLDialect extends Dialect {
     }
 
     @Override
-    public int getDefaultIntervalSecondScale() {
-        return 6;
-    }
-
-    @Override
     public int getDoublePrecision() {
         return 15;
     }
@@ -273,7 +295,7 @@ public class AuroraDSQLDialect extends Dialect {
         return false;
     }
 
-    // Below taken from 7.x PostgreSQLDialect
+    // Below taken from 7.x PostgreSQLDialect, with some removed 7.x features
 
     @Override
     public void appendBinaryLiteral(SqlAppender appender, byte[] bytes) {
@@ -332,7 +354,6 @@ public class AuroraDSQLDialect extends Dialect {
                 }
                 else {
                     appender.appendSql( "time '" );
-                    appendAsLocalTime( appender, temporalAccessor );
                 }
                 appender.appendSql( '\'' );
                 break;
@@ -478,11 +499,6 @@ public class AuroraDSQLDialect extends Dialect {
         return 15;
     }
 
-    @Override
-    public DmlTargetColumnQualifierSupport getDmlTargetColumnQualifierSupport() {
-        return DmlTargetColumnQualifierSupport.TABLE_ALIAS;
-    }
-
     /**
      * {@code microsecond} is the smallest unit for an {@code interval},
      * and the highest precision for a {@code timestamp}, so we could
@@ -494,11 +510,6 @@ public class AuroraDSQLDialect extends Dialect {
     @Override
     public long getFractionalSecondPrecisionInNanos() {
         return 1_000_000_000; //seconds
-    }
-
-    @Override
-    public FunctionalDependencyAnalysisSupport getFunctionalDependencyAnalysisSupport() {
-        return FunctionalDependencyAnalysisSupportImpl.TABLE_REFERENCE;
     }
 
     @Override
@@ -573,11 +584,6 @@ public class AuroraDSQLDialect extends Dialect {
     }
 
     @Override
-    public String quoteCollation(String collation) {
-        return '\"' + collation + '\"';
-    }
-
-    @Override
     public int registerResultSetOutParameter(CallableStatement statement, int col) throws SQLException {
         // Register the type of the out param - PostgreSQL uses Types.OTHER
         statement.registerOutParameter( col++, Types.OTHER );
@@ -632,37 +638,6 @@ public class AuroraDSQLDialect extends Dialect {
                     jdbcTypeCode = TIMESTAMP_UTC;
                 }
                 break;
-            case ARRAY:
-                // PostgreSQL names array types by prepending an underscore to the base name
-                if ( columnTypeName.charAt( 0 ) == '_' ) {
-                    final String componentTypeName = columnTypeName.substring( 1 );
-                    final Integer sqlTypeCode = resolveSqlTypeCode( componentTypeName, jdbcTypeRegistry.getTypeConfiguration() );
-                    if ( sqlTypeCode != null ) {
-                        return jdbcTypeRegistry.resolveTypeConstructorDescriptor(
-                                jdbcTypeCode,
-                                jdbcTypeRegistry.getDescriptor( sqlTypeCode ),
-                                ColumnTypeInformation.EMPTY
-                        );
-                    }
-                    final SqlTypedJdbcType elementDescriptor = jdbcTypeRegistry.findSqlTypedDescriptor( componentTypeName );
-                    if ( elementDescriptor != null ) {
-                        return jdbcTypeRegistry.resolveTypeConstructorDescriptor(
-                                jdbcTypeCode,
-                                elementDescriptor,
-                                ColumnTypeInformation.EMPTY
-                        );
-                    }
-                }
-                break;
-            case STRUCT:
-                final SqlTypedJdbcType descriptor = jdbcTypeRegistry.findSqlTypedDescriptor(
-                        // Skip the schema
-                        columnTypeName.substring( columnTypeName.indexOf( '.' ) + 1 )
-                );
-                if ( descriptor != null ) {
-                    return descriptor;
-                }
-                break;
         }
         return jdbcTypeRegistry.getDescriptor( jdbcTypeCode );
     }
@@ -697,11 +672,6 @@ public class AuroraDSQLDialect extends Dialect {
     }
 
     @Override
-    public boolean supportsFromClauseInUpdate() {
-        return true;
-    }
-
-    @Override
     public boolean supportsIfExistsAfterAlterTable() {
         return true;
     }
@@ -718,11 +688,6 @@ public class AuroraDSQLDialect extends Dialect {
 
     @Override
     public boolean supportsIfExistsBeforeTypeName() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsIsTrue() {
         return true;
     }
 
@@ -848,11 +813,6 @@ public class AuroraDSQLDialect extends Dialect {
     }
 
     @Override
-    public boolean useConnectionToCreateLob() {
-        return false;
-    }
-
-    @Override
     public boolean useInputStreamToInsertBlob() {
         return false;
     }
@@ -909,13 +869,8 @@ public class AuroraDSQLDialect extends Dialect {
                                 .getDescriptor( Object.class )
                 )
         );
-
-        jdbcTypeRegistry.addDescriptor( PostgreSQLEnumJdbcType.INSTANCE );
-        jdbcTypeRegistry.addDescriptor( PostgreSQLOrdinalEnumJdbcType.INSTANCE );
-        jdbcTypeRegistry.addDescriptor( PostgreSQLUUIDJdbcType.INSTANCE );
-
-        // Replace the standard array constructor
-        jdbcTypeRegistry.addTypeConstructor( PostgreSQLArrayJdbcTypeConstructor.INSTANCE );
+        // Modified from original to remove not yet added types from later Hibernate versions, and adds UUID
+        jdbcTypeRegistry.addDescriptor( PG_UUID_JDBC_TYPE );
     }
 
     @Override
@@ -983,9 +938,6 @@ public class AuroraDSQLDialect extends Dialect {
 
         // Prefer jsonb if possible
         ddlTypeRegistry.addDescriptor( new DdlTypeImpl( JSON, "jsonb", this ) );
-
-        ddlTypeRegistry.addDescriptor( new NamedNativeEnumDdlTypeImpl( this ) );
-        ddlTypeRegistry.addDescriptor( new NamedNativeOrdinalEnumDdlTypeImpl( this ) );
     }
 
     @Override
@@ -1016,6 +968,7 @@ public class AuroraDSQLDialect extends Dialect {
         };
     }
 
+    // Modified from 7.x version to remove unsupported functions in 6.2
     @Override
     public void initializeFunctionRegistry(FunctionContributions functionContributions) {
         super.initializeFunctionRegistry(functionContributions);
@@ -1068,30 +1021,6 @@ public class AuroraDSQLDialect extends Dialect {
         functionFactory.locate_positionSubstring();
         functionFactory.windowFunctions();
         functionFactory.listagg_stringAgg( "varchar" );
-        functionFactory.array_postgresql();
-        functionFactory.arrayAggregate();
-        functionFactory.arrayPosition_postgresql();
-        functionFactory.arrayPositions_postgresql();
-        functionFactory.arrayLength_cardinality();
-        functionFactory.arrayConcat_postgresql();
-        functionFactory.arrayPrepend_postgresql();
-        functionFactory.arrayAppend_postgresql();
-        functionFactory.arrayContains_postgresql();
-        functionFactory.arrayIntersects_postgresql();
-        functionFactory.arrayGet_bracket();
-        functionFactory.arraySet_unnest();
-        functionFactory.arrayRemove();
-        functionFactory.arrayRemoveIndex_unnest( true );
-        functionFactory.arraySlice_operator();
-        functionFactory.arrayReplace();
-        if ( getVersion().isSameOrAfter( 14 ) ) {
-            functionFactory.arrayTrim_trim_array();
-        }
-        else {
-            functionFactory.arrayTrim_unnest();
-        }
-        functionFactory.arrayFill_postgresql();
-        functionFactory.arrayToString_postgresql();
 
         functionFactory.makeDateTimeTimestamp();
         // Note that PostgreSQL doesn't support the OVER clause for ordered set-aggregate functions
@@ -1136,11 +1065,6 @@ public class AuroraDSQLDialect extends Dialect {
 
     @Override
     public boolean supportsNonQueryWithCTE() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsConflictClauseForInsertCTE() {
         return true;
     }
 }
