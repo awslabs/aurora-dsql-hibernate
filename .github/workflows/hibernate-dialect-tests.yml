@@ -62,8 +62,6 @@ jobs:
       - name: Run sample application tests with dialect JAR
         working-directory: ./examples/pet-clinic-app
         run : |
-          mkdir -p lib
-          cp ${{ env.DIALECT_JAR }} lib/
           mvn validate
           mvn initialize
           mvn clean compile
