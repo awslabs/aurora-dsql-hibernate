@@ -52,7 +52,12 @@ jobs:
       working-directory: ./dialect
       run: |
         mvn clean package -DskipTests
-        echo "DIALECT_JAR=$(find $(pwd)/target -name "aws-dsql-hibernate-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar")" >> $GITHUB_ENV
+        mvn install:install-file \
+          -Dfile=target/aws-dsql-hibernate-1.0.0.jar \
+          -DgroupId=com.amazon \
+          -DartifactId=aws-dsql-hibernate \
+          -Dversion=1.0.0 \
+          -Dpackaging=jar
 
     - name: Run sample application tests with dialect JAR
       working-directory: ./examples/pet-clinic-app
@@ -62,4 +67,4 @@ jobs:
         mvn validate
         mvn initialize
         mvn clean compile
-        mvn test -Dhibernate.dialect.jar=lib/$(basename ${{ env.DIALECT_JAR }})
+        mvn test

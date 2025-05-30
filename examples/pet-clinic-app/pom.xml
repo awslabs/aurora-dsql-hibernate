@@ -99,8 +99,6 @@
       <groupId>com.amazon</groupId>
       <artifactId>aws-dsql-hibernate</artifactId>
       <version>1.0.0</version>
-      <scope>system</scope>
-      <systemPath>${hibernate.dialect.jar}</systemPath>
     </dependency>
 
     <!-- Caching -->
