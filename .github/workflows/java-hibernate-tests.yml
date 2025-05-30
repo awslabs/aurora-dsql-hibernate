@@ -1,4 +1,4 @@
-name: pgJDBC Integration tests
+name: Hibernate sample tests
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
         type: string
 
 jobs:
-  test:
+  test-sample-app:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -48,15 +48,18 @@ jobs:
         role-to-assume: ${{ secrets.JAVA_IAM_ROLE }}
         aws-region: us-east-1
 
-    - name: Configure and run integration for pgjdbc - admin
-      working-directory: ./examples/pet-clinic-app
- #     env:
- #       CLUSTER_ENDPOINT: ${{ secrets.JAVA_PGJDBC_CLUSTER_ENDPOINT }}
- #       CLUSTER_USER: admin
- #       REGION: ${{ secrets.JAVA_PGJDBC_CLUSTER_REGION }}
+    - name: Build dialect
+      working-directory: ./dialect
       run: |
+        mvn clean package -DskipTests
+        echo "DIALECT_JAR=$(find $(pwd)/target -name "aws-dsql-hibernate-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar")" >> $GITHUB_ENV
+
+    - name: Run sample application tests with dialect JAR
+      working-directory: ./examples/pet-clinic-app
+      run : |
+        mkdir -p lib
+        cp ${{ env.DIALECT_JAR }} lib/
         mvn validate
         mvn initialize
         mvn clean compile
-        mvn test
-
+        mvn test -Dhibernate.dialect.jar=lib/$(basename ${{ env.DIALECT_JAR }})
