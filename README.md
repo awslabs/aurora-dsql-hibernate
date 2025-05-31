@@ -1,4 +1,4 @@
-# Hibernate with Aurora DSQL
+# Aurora DSQL with Hibernate
 
 This repository contains the associated examples and dialect code for working with Aurora DSQL.
 
