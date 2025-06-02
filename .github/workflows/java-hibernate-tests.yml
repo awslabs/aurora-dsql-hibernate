@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'examples/**'
+      - 'dialect/**'
       - '.github/workflows/java-hibernate-tests.yml'
   pull_request:
     branches: [ main ]
@@ -20,7 +21,7 @@ on:
         type: string
 
 jobs:
-  test-sample-app:
+  test:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -51,7 +52,7 @@ jobs:
     - name: Build dialect
       working-directory: ./dialect
       run: |
-        mvn clean package -DskipTests
+        mvn clean package
         mvn install:install-file \
           -Dfile=target/aws-dsql-hibernate-1.0.0.jar \
           -DgroupId=com.amazon \
