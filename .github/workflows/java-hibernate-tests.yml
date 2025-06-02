@@ -1,10 +1,11 @@
-name: pgJDBC Integration tests
+name: Hibernate sample tests
 
 on:
   push:
     branches: [ main ]
     paths:
       - 'examples/**'
+      - 'dialect/**'
       - '.github/workflows/java-hibernate-tests.yml'
   pull_request:
     branches: [ main ]
@@ -48,15 +49,21 @@ jobs:
         role-to-assume: ${{ secrets.JAVA_IAM_ROLE }}
         aws-region: us-east-1
 
-    - name: Configure and run integration for pgjdbc - admin
-      working-directory: ./examples/pet-clinic-app
- #     env:
- #       CLUSTER_ENDPOINT: ${{ secrets.JAVA_PGJDBC_CLUSTER_ENDPOINT }}
- #       CLUSTER_USER: admin
- #       REGION: ${{ secrets.JAVA_PGJDBC_CLUSTER_REGION }}
+    - name: Build dialect
+      working-directory: ./dialect
       run: |
+        mvn clean package
+        mvn install:install-file \
+          -Dfile=target/aws-dsql-hibernate-1.0.0.jar \
+          -DgroupId=com.amazon \
+          -DartifactId=aws-dsql-hibernate \
+          -Dversion=1.0.0 \
+          -Dpackaging=jar
+
+    - name: Run sample application tests with dialect JAR
+      working-directory: ./examples/pet-clinic-app
+      run : |
         mvn validate
         mvn initialize
         mvn clean compile
         mvn test
-

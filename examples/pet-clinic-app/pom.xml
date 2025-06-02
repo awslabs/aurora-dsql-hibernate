@@ -95,6 +95,11 @@
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.amazon</groupId>
+      <artifactId>aws-dsql-hibernate</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
     <!-- Caching -->
     <dependency>
