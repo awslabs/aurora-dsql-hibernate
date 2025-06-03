@@ -55,7 +55,7 @@ jobs:
         mvn clean package
         mvn install:install-file \
           -Dfile=target/aws-dsql-hibernate-1.0.0.jar \
-          -DgroupId=com.amazon \
+          -DgroupId=software.amazon \
           -DartifactId=aws-dsql-hibernate \
           -Dversion=1.0.0 \
           -Dpackaging=jar

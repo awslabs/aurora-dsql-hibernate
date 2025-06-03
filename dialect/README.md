@@ -32,9 +32,9 @@ implementation("com.amazon:aws-dsql-hibernate:1.0.0")
 ```
 
 With the AWS-DSQL-Hibernate JAR included in your Java application, the dialect can then be set in a few ways:
-- In a Hibernate.properties file: `hibernate.dialect=com.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
-- In persistence.xml: `<property name="hibernate.dialect" value="com.amazon.dsql.hibernate.dialect.AuroraDSQLDialect"/>`
-- In Spring application properties: `spring.jpa.properties.hibernate.dialect=com.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
+- In a Hibernate.properties file: `hibernate.dialect=software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
+- In persistence.xml: `<property name="hibernate.dialect" value="software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect"/>`
+- In Spring application properties: `spring.jpa.properties.hibernate.dialect=software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
 - Programmatically using `StandardServiceRegistryBuilder`, the configuration API, or in a `SessionFactory`
 
 Hibernate will not automatically detect the DSQL dialect based on metadata, it must be explicitly specified or else

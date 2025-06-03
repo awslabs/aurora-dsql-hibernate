@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
-package com.amazon.dsql.hibernate.dialect;
+package software.amazon.dsql.hibernate.dialect;
 
 import jakarta.persistence.TemporalType;
 import org.hibernate.LockMode;
