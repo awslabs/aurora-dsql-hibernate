@@ -21,14 +21,14 @@ as a dependency to your Maven or Gradle application:
 ```
 // Maven
 <dependency>
-    <groupId>software.amazon</groupId>
+    <groupId>software.amazon.dsql.hibernate</groupId>
     <artifactId>aurora-dsql-hibernate-dialect</artifactId>
     <version>1.0.0</version>
     <type>pom</type>
 </dependency>
 
 // Gradle
-implementation("software.amazon:aurora-dsql-hibernate-dialect:1.0.0")
+implementation("software.amazon.dsql.hibernate:aurora-dsql-hibernate-dialect:1.0.0")
 ```
 
 With the AWS-DSQL-Hibernate JAR included in your Java application, the dialect can then be set in a few ways:
