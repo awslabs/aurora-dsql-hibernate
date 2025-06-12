@@ -1,10 +1,16 @@
 # Aurora DSQL with Hibernate
 
-This repository contains the associated examples and dialect code for working with Aurora DSQL.
+This repository contains a Hibernate dialect for Aurora DSQL, and a sample application using Hibernate with Aurora DSQL.
+The dialect provides DSQL specific compatibility for Hibernate, while the sample application shows how a Spring Hibernate
+application can use DSQL including token generation and UUID primary keys.
 
-## Getting Started
+## Hibernate Dialect
 
-To run included example please refer to [README](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/examples/pet-clinic-app/README.md).
+For information on the dialect including developer instructions please refer to the [dialect README](dialect/README.md).
+
+## Sample Application
+
+To run the included example please refer to the [sample README](examples/pet-clinic-app/README.md).
 
 ## Security
 
