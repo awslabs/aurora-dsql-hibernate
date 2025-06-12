@@ -6,11 +6,11 @@ application can use DSQL including token generation and UUID primary keys.
 
 ## Hibernate Dialect
 
-For information on the dialect including developer instructions please refer to the [dialect README](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/dialect/README.md).
+For information on the dialect including developer instructions please refer to the [dialect README](dialect/README.md).
 
 ## Sample Application
 
-To run the included example please refer to the [sample README](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/examples/pet-clinic-app/README.md).
+To run the included example please refer to the [sample README](examples/pet-clinic-app/README.md).
 
 ## Security
 
