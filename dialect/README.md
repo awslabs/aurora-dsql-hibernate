@@ -9,7 +9,7 @@ Aurora DSQL's distributed architecture and high availability.
 ## Prerequisites
 
 - Java 17 or higher
-- Hibernate version 6.6 or higher (for this version of the dialect)
+- Hibernate version 6.2 or higher
 - A connection to an Amazon Aurora DSQL database
 - PostgreSQL JDBC driver version 42.x or higher
 
@@ -21,14 +21,14 @@ as a dependency to your Maven or Gradle application:
 ```
 // Maven
 <dependency>
-    <groupId>com.amazon</groupId>
-    <artifactId>aws-dsql-hibernate</artifactId>
+    <groupId>software.amazon.dsql.hibernate</groupId>
+    <artifactId>aurora-dsql-hibernate-dialect</artifactId>
     <version>1.0.0</version>
     <type>pom</type>
 </dependency>
 
 // Gradle
-implementation("com.amazon:aws-dsql-hibernate:1.0.0")
+implementation("software.amazon.dsql.hibernate:aurora-dsql-hibernate-dialect:1.0.0")
 ```
 
 With the AWS-DSQL-Hibernate JAR included in your Java application, the dialect can then be set in a few ways:

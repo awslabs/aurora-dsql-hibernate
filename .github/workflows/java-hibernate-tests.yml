@@ -54,9 +54,9 @@ jobs:
       run: |
         mvn clean package
         mvn install:install-file \
-          -Dfile=target/aws-dsql-hibernate-1.0.0.jar \
-          -DgroupId=software.amazon \
-          -DartifactId=aws-dsql-hibernate \
+          -Dfile=target/aurora-dsql-hibernate-dialect-1.0.0.jar \
+          -DgroupId=software.amazon.dsql.hibernate \
+          -DartifactId=aurora-dsql-hibernate-dialect \
           -Dversion=1.0.0 \
           -Dpackaging=jar
 
