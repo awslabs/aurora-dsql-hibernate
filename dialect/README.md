@@ -6,6 +6,17 @@ The AWS DSQL Hibernate dialect provides integration between Hibernate ORM and Am
 Java applications to leverage Hibernate's powerful object-relational mapping capabilities while taking advantage of
 Aurora DSQL's distributed architecture and high availability.
 
+Here is a list of the main changes this dialect introduces:
+
+* Make sure that features that are not supported by Aurora DSQL are properly flagged or handled
+    * Avoids usage of temporary tables
+    * Avoids usage of arrays, favouring tables instead
+    * Avoids usage of unsupported `TRUNCATE` command
+    * Avoids unsupported locking types
+* Perform `ASYNC INDEX` creation transparently
+* Provides correct `float` precisions
+* Provides correct `varchar` size limits
+
 ## Prerequisites
 
 - Java 17 or higher
