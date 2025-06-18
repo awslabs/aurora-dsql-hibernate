@@ -1,21 +1,10 @@
-# AWS DSQL Hibernate dialect
+# Aurora DSQL Dialect for Hibernate
 
 ## Introduction
 
-The AWS DSQL Hibernate dialect provides integration between Hibernate ORM and Amazon Aurora DSQL. This dialect enables
+The Aurora DSQL dialect for Hibernate provides integration between Hibernate ORM and Aurora DSQL. This dialect enables
 Java applications to leverage Hibernate's powerful object-relational mapping capabilities while taking advantage of
 Aurora DSQL's distributed architecture and high availability.
-
-Here is a list of the main changes this dialect introduces:
-
-* Make sure that features that are not supported by Aurora DSQL are properly flagged or handled
-    * Avoids usage of temporary tables
-    * Avoids usage of arrays, favouring tables instead
-    * Avoids usage of unsupported `TRUNCATE` command
-    * Avoids unsupported locking types
-* Perform `ASYNC INDEX` creation transparently
-* Provides correct `float` precisions
-* Provides correct `varchar` size limits
 
 ## Prerequisites
 
@@ -26,7 +15,7 @@ Here is a list of the main changes this dialect introduces:
 
 ## Setup
 
-A dialect for Hibernate DSQL is used in largely the same way as other dialects for other databases. It is added
+A dialect for Aurora DSQL is used in largely the same way as other dialects for other databases. It is added
 as a dependency to your Maven or Gradle application:
 
 ```
@@ -42,7 +31,7 @@ as a dependency to your Maven or Gradle application:
 implementation("software.amazon.dsql.hibernate:aurora-dsql-hibernate-dialect:1.0.0")
 ```
 
-With the AWS-DSQL-Hibernate JAR included in your Java application, the dialect can then be set in a few ways:
+With the `aurora-dsql-hibernate-dialect` JAR included in your Java application, the dialect can then be set in a few ways:
 - In a Hibernate.properties file: `hibernate.dialect=software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
 - In persistence.xml: `<property name="hibernate.dialect" value="software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect"/>`
 - In Spring application properties: `spring.jpa.properties.hibernate.dialect=software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect`
@@ -86,12 +75,15 @@ Usage of an automatically generated schema with Hibernate is not recommended wit
 for experimental development or testing environments, it should not be used in production. An automatically generated
 schema can perform poorly, and can be destructive in unexpected ways.
 
-## Limitations
+## Dialect Features and Limitations
 
-- **Foreign Keys**: DSQL does not support foreign key constraints. The dialect disables these constraints, but be aware that referential integrity must be maintained at the application level.
-- **Sequences**: Sequence objects, SERIAL, and IDENTITY columns are not supported in DSQL, making them unsuitable for primary key generation in Hibernate.
-- **Locking**: DSQL uses optimistic locking for all transactions. Attempting to use Hibernate's locking strategies (including Hibernate version-based optimistic locking) will either fail or have no effect.
-- **Temporary tables**: Temporary tables are unsupported in DSQL, and so Hibernate may use standard tables instead. These tables may appear with `HT_` or `HTE_` prefixes, and will be managed automatically by Hibernate.
+- **Data types**: the dialect provides correct `float` precision and `varchar` size limits.
+- **Foreign Keys**: Aurora DSQL does not support foreign key constraints. The dialect disables these constraints, but be aware that referential integrity must be maintained at the application level.
+- **Index creation**: Aurora DSQL does not support `CREATE INDEX` or `CREATE UNIQUE INDEX` commands. The dialect respectively uses `CREATE INDEX ASYNC` and `CREATE UNIQUE INDEX ASYNC` command instead.
+- **Locking**: Aurora DSQL uses optimistic concurrency control (OCC), which works differently from traditional lock-based systems. The dialect does not support choosing a locking strategy. See the [Concurrency control in Aurora DSQL](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-concurrency-control.html) page for more information.
+- **Sequences**: Aurora DSQL does not support sequence objects, `SERIAL` and `IDENTITY` columns, thus they are not supported by this dialect. For this reason, these data types are unsuitable for primary key generation with this dialect. See the [Primary keys in Aurora DSQL](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-primary-keys.html) page for more information.
+- **Temporary tables**: Aurora DSQL does not support temporary tables. The dialect will use standard tables instead. These tables will appear with `HT_` or `HTE_` prefixes, and will be managed automatically by Hibernate.
+- **Truncate command**: Aurora DSQL does not support `TRUNCATE` command. The dialect uses a `DELETE` command instead.
 
 ## Contributing
 
