@@ -87,7 +87,7 @@ schema can perform poorly, and can be destructive in unexpected ways.
 
 ## Contributing
 
-We welcome contributions to improve the AWS DSQL Hibernate dialect. Please follow these steps:
+We welcome contributions to improve the Aurora DSQL dialect for Hibernate. Please follow these steps:
 
 1. Fork the repository
 2. Create a feature branch
