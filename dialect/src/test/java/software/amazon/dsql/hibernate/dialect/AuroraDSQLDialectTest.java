@@ -8,11 +8,13 @@ import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.sequence.SequenceSupport;
 import org.hibernate.dialect.sequence.NoSequenceSupport;
 import org.hibernate.mapping.ForeignKey;
+import org.hibernate.persister.entity.Lockable;
 import org.hibernate.tool.schema.spi.Exporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Unit tests for {@link AuroraDSQLDialect}.
@@ -62,7 +64,7 @@ public class AuroraDSQLDialectTest {
         assertEquals(" for update", dialect.getWriteLockString(0));
         assertEquals(" for update", dialect.getWriteLockString("alias", 0));
 
-        assertNotNull(dialect.getLockingStrategy(null, LockMode.PESSIMISTIC_WRITE));
+        assertNotNull(dialect.getLockingStrategy(null, LockMode.OPTIMISTIC));
     }
 
     @Test
