@@ -83,7 +83,7 @@ in an error. This has largely the same effect as Hibernate's built in version-ba
 therefore not use Hibernate's `OPTIMISTIC` lock mode, as DSQL will always trigger an OCC error prior to committing if
 there is a conflict, rendering the version check unnecessary.
 
-**There are only two lock modes that users should use: `NONE` (which will still use standard DSQL OCC), and `PESSIMISTIC_WRITE`.** Although DSQL will always use
+**There are only two lock modes that should be used: `NONE` (which will still use standard DSQL OCC), and `PESSIMISTIC_WRITE`.** Although DSQL will always use
 optimistic locking, in Hibernate `PESSIMISTIC_WRITE` will add the `SELECT ... FOR UPDATE` modifier, which adds additional
 read checks on selected rows, preventing commits if rows read are modified by another transaction. There are multiple
 examples of how DSQL's concurrency control works [available here in an AWS blog](https://aws.amazon.com/blogs/database/concurrency-control-in-amazon-aurora-dsql/), 
