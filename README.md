@@ -55,7 +55,7 @@ for more information on configuring your Hibernate application, including settin
 Configure your database connection for DSQL as follows:
 
 ```properties
-hibernate.connection.url=jdbc:postgresql://<cluster_endpoint>/postgres?sslMode=verify-full
+hibernate.connection.url=jdbc:postgresql://<cluster_endpoint>/postgres?sslMode=verify-full&sslNegotiation=direct
 hibernate.connection.username=<username>
 hibernate.connection.driver_class=org.postgresql.Driver
 ```
