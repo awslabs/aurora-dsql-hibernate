@@ -31,7 +31,7 @@ public class DialectConfigurationPersistenceTest {
         File persistenceXml = new File(metaInfDir, "persistence.xml");
         String token = generateToken();
         String escapedToken = token.replace("&", "&amp;");
-
+        String escapedUrl = DSQLHibernateBaseTest.url.replace("&", "&amp;");
         try (FileWriter writer = new FileWriter(persistenceXml)) {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writer.write("<persistence xmlns=\"http://xmlns.jcp.org/xml/ns/persistence\"\n");
@@ -43,7 +43,7 @@ public class DialectConfigurationPersistenceTest {
             writer.write("        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>\n");
             writer.write("        <properties>\n");
             writer.write("            <property name=\"hibernate.dialect\" value=\"software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect\"/>\n");
-            writer.write("            <property name=\"javax.persistence.jdbc.url\" value=\"jdbc:postgresql://" + endpoint + "/postgres\"/>\n");
+            writer.write("            <property name=\"javax.persistence.jdbc.url\" value=\"" + escapedUrl + "\"/>\n");
             writer.write("            <property name=\"javax.persistence.jdbc.user\" value=\"admin\"/>\n");
             writer.write("            <property name=\"javax.persistence.jdbc.password\" value=\"" + escapedToken + "\"/>\n");
             writer.write("            <property name=\"javax.persistence.jdbc.driver\" value=\"org.postgresql.Driver\"/>\n");

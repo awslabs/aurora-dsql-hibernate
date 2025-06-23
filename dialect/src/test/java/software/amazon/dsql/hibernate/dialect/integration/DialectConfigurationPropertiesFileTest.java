@@ -23,7 +23,7 @@ public class DialectConfigurationPropertiesFileTest {
         File propertiesFile = new File(System.getProperty("test.resources.dir"), "hibernate.properties");
         try (FileWriter writer = new FileWriter(propertiesFile)) {
             writer.write("hibernate.dialect=software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect\n");
-            writer.write("hibernate.connection.url=jdbc:postgresql://" + DSQLHibernateBaseTest.endpoint + "/postgres\n");
+            writer.write("hibernate.connection.url=" + DSQLHibernateBaseTest.url + "\n");
             writer.write("hibernate.connection.username=admin\n");
             writer.write("hibernate.connection.password=" + DSQLHibernateBaseTest.generateToken() + "\n");
             writer.write("hibernate.connection.driver_class=org.postgresql.Driver\n");
