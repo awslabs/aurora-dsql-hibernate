@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'software.amazon.dsql.hibernate'
+group = 'software.amazon.dsql'
 version = '1.0.0'
 
 repositories {
@@ -12,15 +12,44 @@ repositories {
 }
 
 dependencies {
-    implementation("org.hibernate:hibernate-core:6.2.0.Final")
+    implementation("org.hibernate:hibernate-core:6.2.38.Final")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
     testImplementation("org.mockito:mockito-core:5.3.1")
+    testImplementation("software.amazon.awssdk:dsql:2.31.64")
+    testImplementation("software.amazon.awssdk:regions:2.31.64")
+    testImplementation("software.amazon.awssdk:aws-core:2.31.64")
+    testImplementation("org.postgresql:postgresql:42.7.2")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.20.0")
+    testImplementation("org.hibernate.orm:hibernate-ant:6.2.38.Final")
+
 }
 
 test {
     useJUnitPlatform()
+    forkEvery = 0
+    maxParallelForks = 1
+    systemProperty 'RUN_INTEGRATION', System.getenv('RUN_INTEGRATION') ?: 'FALSE'
+    systemProperty 'test.resources.dir', "${project.buildDir}/resources/test"
+
+    // The configuration file tests break without this, because they conflict with cached properties
+    tasks.register('configTests', Test) {
+        filter {
+            includeTestsMatching "*.DialectConfiguration*Test"
+        }
+        forkEvery = 1
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 jar {

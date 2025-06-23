@@ -52,9 +52,9 @@ jobs:
     - name: Build dialect
       working-directory: ./dialect
       run: |
-        mvn clean package
+        gradle build
         mvn install:install-file \
-          -Dfile=target/aurora-dsql-hibernate-dialect-1.0.0.jar \
+          -Dfile=build/libs/aurora-dsql-hibernate-dialect-1.0.0.jar \
           -DgroupId=software.amazon.dsql.hibernate \
           -DartifactId=aurora-dsql-hibernate-dialect \
           -Dversion=1.0.0 \

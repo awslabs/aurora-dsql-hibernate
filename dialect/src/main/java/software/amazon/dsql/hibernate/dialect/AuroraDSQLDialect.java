@@ -32,6 +32,7 @@ import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 import org.hibernate.dialect.lock.LockingStrategy;
 import org.hibernate.dialect.lock.LockingStrategyException;
+import org.hibernate.dialect.lock.PessimisticWriteSelectLockingStrategy;
 import org.hibernate.dialect.pagination.LimitHandler;
 import org.hibernate.dialect.pagination.OffsetFetchLimitHandler;
 import org.hibernate.dialect.sequence.NoSequenceSupport;
@@ -78,6 +79,7 @@ import org.hibernate.type.descriptor.jdbc.ObjectNullAsBinaryTypeJdbcType;
 import org.hibernate.type.descriptor.jdbc.UUIDJdbcType;
 import org.hibernate.type.descriptor.jdbc.XmlJdbcType;
 import org.hibernate.type.descriptor.jdbc.spi.JdbcTypeRegistry;
+import org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType;
 import org.hibernate.type.descriptor.sql.internal.DdlTypeImpl;
 import org.hibernate.type.descriptor.sql.internal.Scale6IntervalSecondDdlType;
 import org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry;
@@ -96,6 +98,8 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import static java.sql.Types.DOUBLE;
+import static java.sql.Types.FLOAT;
 import static org.hibernate.query.sqm.TemporalUnit.DAY;
 import static org.hibernate.query.sqm.TemporalUnit.EPOCH;
 import static org.hibernate.type.SqlTypes.BINARY;
@@ -242,7 +246,20 @@ public class AuroraDSQLDialect extends Dialect {
 
     @Override
     public LockingStrategy getLockingStrategy(Lockable lockable, LockMode lockMode) {
-        return NO_LOCKING_STRATEGY;
+        switch (lockMode) {
+            case PESSIMISTIC_FORCE_INCREMENT:
+            case UPGRADE_NOWAIT:
+            case UPGRADE_SKIPLOCKED:
+            case OPTIMISTIC_FORCE_INCREMENT:
+            case PESSIMISTIC_READ:
+                throw new UnsupportedOperationException("Unsupported lock mode.");
+            case PESSIMISTIC_WRITE:
+                return new PessimisticWriteSelectLockingStrategy(lockable, lockMode);
+            case OPTIMISTIC:
+            case READ:
+            default:
+                return NO_LOCKING_STRATEGY;
+        }
     }
 
     @Override
@@ -928,6 +945,12 @@ public class AuroraDSQLDialect extends Dialect {
         // The issue is that the JDBC driver can't handle createArrayOf( "float(24)", ... )
         // It requires the use of "real" or "float4"
         // Alternatively we could introduce a new API in Dialect for creating such base names
+        ddlTypeRegistry.addDescriptor(
+                CapacityDependentDdlType.builder( FLOAT, columnType( FLOAT ), castType( FLOAT ), this )
+                        .withTypeCapacity( 6, "float4" )
+                        .withTypeCapacity( 15, "float8" )
+                        .build()
+        );
 
         ddlTypeRegistry.addDescriptor( new DdlTypeImpl( SQLXML, "xml", this ) );
         ddlTypeRegistry.addDescriptor( new DdlTypeImpl( UUID, "uuid", this ) );
@@ -963,7 +986,12 @@ public class AuroraDSQLDialect extends Dialect {
             @Override
             protected <T extends JdbcOperation> SqlAstTranslator<T> buildTranslator(
                     SessionFactoryImplementor sessionFactory, Statement statement) {
-                return new PostgreSQLSqlAstTranslator<>( sessionFactory, statement );
+                return new PostgreSQLSqlAstTranslator<T>(sessionFactory, statement) {
+                    @Override
+                    protected String getForUpdate() {
+                        return " for update";
+                    }
+                };
             }
         };
     }
