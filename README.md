@@ -8,8 +8,8 @@ Aurora DSQL's distributed architecture and high availability.
 
 ## Sample Application
 
-There is an included sample application in [examples/pet-clinic](examples/pet-clinic) that shows how to use Aurora DSQL
-with Hibernate. To run the included example please refer to the [sample README](examples/pet-clinic/README.md).
+There is an included sample application in [examples/pet-clinic-app](examples/pet-clinic-app) that shows how to use Aurora DSQL
+with Hibernate. To run the included example please refer to the [sample README](examples/pet-clinic-app/README.md).
 
 ## Prerequisites
 
