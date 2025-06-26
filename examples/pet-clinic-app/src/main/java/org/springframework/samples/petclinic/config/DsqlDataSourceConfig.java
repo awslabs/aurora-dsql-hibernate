@@ -87,8 +87,6 @@ public class DsqlDataSourceConfig {
 		final String token = username.equals("admin") ? utilities.generateDbConnectAdminAuthToken(requester)
 				: utilities.generateDbConnectAuthToken(requester);
 
-		logger.info("Using this token: " + token);
-
 		dataSource.setPassword(token);
 		logger.info("Generated DSQL token");
 	}

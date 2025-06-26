@@ -52,7 +52,6 @@ class SpecialtyController {
 	}
 
 	private String addPaginationModel(int page, Page<Specialty> paginated, Model model) {
-		System.out.println("Deepak 1");
 		List<Specialty> listSpecialties = paginated.getContent();
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", paginated.getTotalPages());

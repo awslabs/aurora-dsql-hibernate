@@ -158,13 +158,6 @@ public class AuroraDSQLDialect extends Dialect {
         }
     };
 
-    private static final IdentityColumnSupportImpl NO_IDENTITY_COLUMN_SUPPORT = new IdentityColumnSupportImpl() {
-        @Override
-        public boolean supportsIdentityColumns() {
-            return false;
-        }
-    };
-
     // Taken from PostgreSQLUUIDJdbcType.java in Hibernate 7.0 and added here as the class didn't exist yet in 6.2
     private static final JdbcType PG_UUID_JDBC_TYPE = new UUIDJdbcType() {
         public <X> ValueBinder<X> getBinder(JavaType<X> javaType) {
@@ -193,16 +186,6 @@ public class AuroraDSQLDialect extends Dialect {
             };
         }
     };
-
-    @Override
-    public IdentityColumnSupport getIdentityColumnSupport() {
-        return NO_IDENTITY_COLUMN_SUPPORT;
-    }
-
-    @Override
-    public SequenceSupport getSequenceSupport() {
-        return NoSequenceSupport.INSTANCE;
-    }
 
     @Override
     public boolean supportsTemporaryTables() {

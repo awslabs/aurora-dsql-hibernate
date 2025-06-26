@@ -96,7 +96,7 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>software.amazon.dsql.hibernate</groupId>
+      <groupId>software.amazon.dsql</groupId>
       <artifactId>aurora-dsql-hibernate-dialect</artifactId>
       <version>1.0.0</version>
     </dependency>
