@@ -26,20 +26,24 @@ dependencies {
 
 }
 
-test {
+
+// This is separated to ensure isolation in the Dialect configuration tests
+tasks.register('configurationTests', Test) {
     useJUnitPlatform()
-    forkEvery = 0
-    maxParallelForks = 1
+    include '**/DialectConfiguration*Test.class'
+    forkEvery = 1  // Fork for each configuration test
     systemProperty 'RUN_INTEGRATION', System.getenv('RUN_INTEGRATION') ?: 'FALSE'
     systemProperty 'test.resources.dir', "${project.buildDir}/resources/test"
+}
 
-    // The configuration file tests break without this, because they conflict with cached properties
-    tasks.register('configTests', Test) {
-        filter {
-            includeTestsMatching "*.DialectConfiguration*Test"
-        }
-        forkEvery = 1
-    }
+test {
+    useJUnitPlatform()
+    systemProperty 'RUN_INTEGRATION', System.getenv('RUN_INTEGRATION') ?: 'FALSE'
+
+    // Exclude configuration tests from main test task, as they require isolation
+    exclude '**/DialectConfiguration*Test.class'
+
+    dependsOn configurationTests
 }
 
 java {
