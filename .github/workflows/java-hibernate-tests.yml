@@ -54,7 +54,7 @@ jobs:
       env:
         CLUSTER_ENDPOINT: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_ENDPOINT }}
         CLUSTER_REGION: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_REGION }}
-        RUN_INTEGRATION: TRUE
+        RUN_INTEGRATION: "TRUE"
       run: |
         ./gradlew build -i
         mvn install:install-file \
