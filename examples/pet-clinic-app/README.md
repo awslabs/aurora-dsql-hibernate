@@ -70,6 +70,7 @@ The code automatically detects the user type and adjusts its behavior accordingl
 
    ```bash
      export CLUSTER_ENDPOINT=<Paste endpoint>
+     export REGION=<Cluster region>
      export CLUSTER_USER=admin
      export CLUSTER_SCHEMA=postgres
    ```
@@ -245,7 +246,7 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Person implements Serializable {
 
-    @Generated
+    @GeneratedValue
     @Id
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID DEFAULT gen_random_uuid()")
     private UUID id;

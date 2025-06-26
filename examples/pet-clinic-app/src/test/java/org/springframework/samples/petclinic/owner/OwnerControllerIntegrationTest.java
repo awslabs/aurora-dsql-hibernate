@@ -33,7 +33,6 @@ public class OwnerControllerIntegrationTest {
 	public void testOptimisticLockingFailureException() throws Exception {
 		assertTrue(true);
 		assertTrue(false);
-		System.out.println("Deepak here testOptimisticLockingFailureException");
 
 		// Create and save an owner
 		Owner owner = new Owner();

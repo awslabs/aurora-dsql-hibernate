@@ -70,6 +70,7 @@ in DSQL.** UUID key generation can be done in your entity definition as follows:
 
 ```java
 @Id
+@GeneratedValue
 @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID DEFAULT gen_random_uuid()")
 private UUID id;
 ```
@@ -110,6 +111,10 @@ and Aurora DSQL. The list below contains some of the key differences from the Po
 - **Temporary tables**: Aurora DSQL does not support temporary tables. The dialect will use standard tables instead. These tables will appear with `HT_` or `HTE_` prefixes, and will be managed automatically by Hibernate.
 - **Truncate command**: Aurora DSQL does not support `TRUNCATE` command. The dialect uses a `DELETE` command instead.
 
+
+## Developer instructions
+
+Instructions on how to build and test the dialect are available in the [Developer Instructions](dialect/README.md).
 
 ## Security
 

@@ -20,8 +20,6 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Generated;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
@@ -36,7 +34,7 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
-	@Generated
+	@GeneratedValue
 	@Id
 	@Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID DEFAULT gen_random_uuid()")
 	private UUID id;
