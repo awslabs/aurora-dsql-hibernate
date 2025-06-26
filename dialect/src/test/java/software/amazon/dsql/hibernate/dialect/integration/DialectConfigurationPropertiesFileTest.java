@@ -9,6 +9,7 @@ import org.hibernate.engine.jdbc.spi.JdbcServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.parallel.Isolated;
 import software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 @EnabledIfSystemProperty(named = "RUN_INTEGRATION", matches = "TRUE")
+@Isolated
 public class DialectConfigurationPropertiesFileTest {
 
     @Test
