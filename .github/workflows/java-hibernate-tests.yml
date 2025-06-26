@@ -56,7 +56,7 @@ jobs:
         CLUSTER_REGION: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_REGION }}
         RUN_INTEGRATION: TRUE
       run: |
-        ./gradlew build
+        ./gradlew build -i
         mvn install:install-file \
           -Dfile=build/libs/aurora-dsql-hibernate-dialect-1.0.0.jar \
           -DgroupId=software.amazon.dsql \
