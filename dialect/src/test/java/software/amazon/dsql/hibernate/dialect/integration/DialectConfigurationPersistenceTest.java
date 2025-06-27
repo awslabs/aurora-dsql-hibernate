@@ -28,6 +28,7 @@ public class DialectConfigurationPersistenceTest {
 
     @Test
     void testDialectFromPersistenceXml() throws IOException {
+        // Places the persistence.xml in build/resources/test/META-INF as this is where JPA expects it
         File metaInfDir = new File(System.getProperty("test.resources.dir") + "/META-INF");
         metaInfDir.mkdirs();
         File persistenceXml = new File(metaInfDir, "persistence.xml");
