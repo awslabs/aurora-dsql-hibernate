@@ -13,12 +13,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.parallel.Isolated;
 import software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@Isolated
 @EnabledIfSystemProperty(named = "RUN_INTEGRATION", matches = "TRUE")
 public class DialectConfigurationTest {
 
