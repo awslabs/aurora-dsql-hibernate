@@ -52,6 +52,7 @@ public class DialectConfigurationPersistenceTest {
             writer.write("        </properties>\n");
             writer.write("    </persistence-unit>\n");
             writer.write("</persistence>\n");
+            writer.flush();
         }
 
         try (
