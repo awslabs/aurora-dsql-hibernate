@@ -46,13 +46,17 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{ secrets.JAVA_IAM_ROLE }}
+        role-to-assume: ${{ secrets.HIBERNATE_IAM_ROLE }}
         aws-region: us-east-1
 
     - name: Build dialect
       working-directory: ./dialect
+      env:
+        CLUSTER_ENDPOINT: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_ENDPOINT }}
+        CLUSTER_REGION: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_REGION }}
+        RUN_INTEGRATION: "TRUE"
       run: |
-        ./gradlew build
+        ./gradlew build -i
         mvn install:install-file \
           -Dfile=build/libs/aurora-dsql-hibernate-dialect-1.0.0.jar \
           -DgroupId=software.amazon.dsql \

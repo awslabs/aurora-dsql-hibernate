@@ -91,7 +91,7 @@ public class DataTypesTest extends DSQLHibernateBaseTest {
             Object[] columnInfo = session.createNativeQuery(
                             "SELECT column_name, data_type, numeric_precision, numeric_scale " +
                                     "FROM information_schema.columns " +
-                                    "WHERE table_name = 'typesentity' AND column_name = 'decimalvaldefault'",
+                                    "WHERE table_name = 'datatypesentity' AND column_name = 'decimalvaldefault'",
                             Object[].class)
                     .getSingleResult();
             Assertions.assertEquals("numeric", columnInfo[1].toString().toLowerCase(),
@@ -143,7 +143,7 @@ public class DataTypesTest extends DSQLHibernateBaseTest {
             List<Object[]> columnInfo = session.createNativeQuery(
                 "SELECT column_name, data_type, numeric_precision, numeric_scale " +
                 "FROM information_schema.columns " +
-                "WHERE table_name = 'typesentity' AND (column_name = 'floatval' OR column_name = 'doubleval')" +
+                "WHERE table_name = 'datatypesentity' AND (column_name = 'floatval' OR column_name = 'doubleval')" +
                 "ORDER BY column_name",
                 Object[].class).getResultList();
 

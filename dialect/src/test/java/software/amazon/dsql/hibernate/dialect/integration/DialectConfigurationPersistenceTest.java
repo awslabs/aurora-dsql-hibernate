@@ -12,6 +12,7 @@ import org.hibernate.engine.jdbc.spi.JdbcServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.parallel.Isolated;
 import software.amazon.dsql.hibernate.dialect.AuroraDSQLDialect;
 
 import java.io.File;
@@ -22,11 +23,13 @@ import static software.amazon.dsql.hibernate.dialect.integration.DSQLHibernateBa
 import static software.amazon.dsql.hibernate.dialect.integration.DSQLHibernateBaseTest.generateToken;
 
 @EnabledIfSystemProperty(named = "RUN_INTEGRATION", matches = "TRUE")
+@Isolated
 public class DialectConfigurationPersistenceTest {
 
     @Test
     void testDialectFromPersistenceXml() throws IOException {
-        File metaInfDir = new File("build/resources/test/META-INF");
+        // Places the persistence.xml in build/resources/test/META-INF as this is where JPA expects it
+        File metaInfDir = new File(System.getProperty("test.resources.dir") + "/META-INF");
         metaInfDir.mkdirs();
         File persistenceXml = new File(metaInfDir, "persistence.xml");
         String token = generateToken();
@@ -50,6 +53,7 @@ public class DialectConfigurationPersistenceTest {
             writer.write("        </properties>\n");
             writer.write("    </persistence-unit>\n");
             writer.write("</persistence>\n");
+            writer.flush();
         }
 
         try (
