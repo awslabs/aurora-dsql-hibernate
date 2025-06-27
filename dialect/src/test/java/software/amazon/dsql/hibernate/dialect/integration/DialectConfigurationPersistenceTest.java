@@ -26,7 +26,7 @@ public class DialectConfigurationPersistenceTest {
 
     @Test
     void testDialectFromPersistenceXml() throws IOException {
-        File metaInfDir = new File("build/resources/test/META-INF");
+        File metaInfDir = new File(System.getProperty("test.resources.dir") + "/META-INF");
         metaInfDir.mkdirs();
         File persistenceXml = new File(metaInfDir, "persistence.xml");
         String token = generateToken();
