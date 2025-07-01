@@ -26,7 +26,7 @@ public abstract class DSQLHibernateBaseTest {
 
     public static final String username = "admin";
     public static final String endpoint = System.getenv("CLUSTER_ENDPOINT");
-    public static final Region region = Region.of(System.getenv("CLUSTER_REGION"));
+    public static final Region region = Region.of(System.getenv("REGION"));
     public static final String url = "jdbc:postgresql://" + endpoint + "/postgres?sslMode=verify-full&sslNegotiation=direct";
 
     protected Configuration configuration;

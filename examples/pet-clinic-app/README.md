@@ -75,16 +75,6 @@ The code automatically detects the user type and adjusts its behavior accordingl
      export CLUSTER_SCHEMA=postgres
    ```
 
-10. Cluster Actions menu | Connect
-    - Copy lower right to obtain token based password
-11. CloudShell Terminal
-
-    ```bash
-      export PGPASSWORD=<Paste token based password>
-      chmod +x create_petclinic.sh
-      ./create_petclinic.sh
-    ```
-
 # Linux/Mac Gradle
 
 ```bash
