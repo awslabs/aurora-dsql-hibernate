@@ -1,7 +1,9 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0 OR LGPL-2.1
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'org.jreleaser' version '1.19.0'
 }
 
 group = 'software.amazon.dsql'
@@ -62,5 +64,72 @@ jar {
                 'Implementation-Title': 'AWS DSQL Hibernate',
                 'Implementation-Version': version
         )
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'software.amazon.dsql'
+            artifactId = 'aurora-dsql-hibernate-dialect'
+
+            from components.java
+
+            pom {
+                name = 'Aurora DSQL Dialect for Hibernate'
+                description = 'Hibernate dialect for Amazon Aurora DSQL, enabling seamless integration between Hibernate ORM and Aurora DSQL.'
+                url = 'https://github.com/awslabs/aurora-dsql-hibernate'
+                inceptionYear = '2025'
+                scm{
+                    url = 'https://github.com/awslabs/aurora-dsql-hibernate/tree/main'
+                    connection = 'scm:git:ssh://git@github.com/awslabs/aurora-dsql-hibernate.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/awslabs/aurora-dsql-hibernate.git'
+                }
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                    license {
+                        name = 'GNU Lesser General Public License, version 2.1'
+                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'aws-aurora-dsql'
+                        name = 'Aurora DSQL Team'
+                        organization = 'Amazon Web Services'
+                        organizationUrl = 'https://aws.amazon.com'
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+        }
     }
 }
