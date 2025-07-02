@@ -7,11 +7,11 @@ test the dialect.
 
 From a terminal in the [dialect](../dialect) directory, you can run the full build with:
 
-`gradle build`
+`./gradlew build`
 
 To assemble the Jar without running any tests use:
 
-`gradle assemble`
+`./gradlew assemble`
 
 A Jar containing the dialect will be produced at `build/libs/aurora-dsql-hibernate-dialect-1.0.0.jar`. This Jar can
 then be used in the Pet-Clinic sample or in your Hibernate application.
@@ -25,11 +25,11 @@ guide.
 
 1. Set environment variables:
     1. `export CLUSTER_ENDPOINT=<your dsql cluster>`
-    2. `export CLUSTER_REGION=<your dsql cluster's region>`
+    2. `export REGION=<your dsql cluster's region>`
     3. `export RUN_INTEGRATION=TRUE`
 2. Run the tests (`-i` optionally provides more logging):
-   1. `gradle test -i` to run all tests including unit tests
-   2. `gradle test --tests "software.amazon.dsql.integration.* -i`  for all integration tests
-   3. `gradle test --tests <Class Name> -i`  for a specific test class
+   1. `./gradlew test -i` to run all tests including unit tests
+   2. `./gradlew test --tests "software.amazon.dsql.integration.* -i`  for all integration tests
+   3. `./gradlew test --tests <Class Name> -i`  for a specific test class
 3. An HTML test report will be automatically generated at `build/reports/tests/index.html`.
 
