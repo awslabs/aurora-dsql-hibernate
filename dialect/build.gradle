@@ -77,7 +77,7 @@ publishing {
 
             pom {
                 name = 'Aurora DSQL Dialect for Hibernate'
-                description = 'Hibernate dialect for Amazon Aurora DSQL, enabling seamless integration between Hibernate ORM and Aurora DSQL.'
+                description = 'Amazon Aurora DSQL dialect for Hibernate, enabling seamless integration between Hibernate ORM and Aurora DSQL.'
                 url = 'https://github.com/awslabs/aurora-dsql-hibernate'
                 inceptionYear = '2025'
                 scm{
