@@ -73,6 +73,9 @@ The code automatically detects the user type and adjusts its behavior accordingl
      export REGION=<Cluster region>
      export CLUSTER_USER=admin
      export CLUSTER_SCHEMA=postgres
+   
+      chmod +x create_petclinic.sh
+      ./create_petclinic.sh
    ```
 
 # Linux/Mac Gradle
