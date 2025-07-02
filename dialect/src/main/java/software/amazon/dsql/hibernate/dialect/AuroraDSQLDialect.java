@@ -11,6 +11,7 @@ import org.hibernate.boot.model.FunctionContributions;
 import org.hibernate.boot.model.TypeContributions;
 import org.hibernate.boot.model.relational.SqlStringGenerationContext;
 import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.DmlTargetColumnQualifierSupport;
 import org.hibernate.dialect.NationalizationSupport;
 import org.hibernate.dialect.OracleDialect;
 import org.hibernate.dialect.PgJdbcHelper;
@@ -1073,5 +1074,10 @@ public class AuroraDSQLDialect extends Dialect {
     @Override
     public boolean supportsNonQueryWithCTE() {
         return true;
+    }
+
+    @Override
+    public DmlTargetColumnQualifierSupport getDmlTargetColumnQualifierSupport() {
+        return DmlTargetColumnQualifierSupport.TABLE_ALIAS;
     }
 }
