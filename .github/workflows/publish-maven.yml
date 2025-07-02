@@ -2,12 +2,6 @@ name: Deploy to Maven Central
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: 'Manual Publish'
-        required: false
-        type: string
 
 jobs:
   deploy:
