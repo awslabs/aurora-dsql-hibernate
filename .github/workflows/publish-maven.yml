@@ -2,6 +2,12 @@ name: Deploy to Maven Central
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Manual Publish'
+        required: false
+        type: string
 
 jobs:
   deploy:
@@ -21,6 +27,7 @@ jobs:
         working-directory: ./dialect
         run: ./gradlew jreleaserDeploy
         env:
+          JRELEASER_MAVENCENTRAL_STAGE: 'UPLOAD'
           JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           JRELEASER_GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
           JRELEASER_SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
