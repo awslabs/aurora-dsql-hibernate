@@ -82,6 +82,8 @@ The code automatically detects the user type and adjusts its behavior accordingl
 
 ```bash
 # create_petclinic.sh step is optional if completed in Cloud Shell
+wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O root.pem
+export PGSSLROOTCERT=root.pem
 ./create_petclinic.sh
 ./gradlew clean
 ./gradlew bootRun
@@ -91,6 +93,8 @@ The code automatically detects the user type and adjusts its behavior accordingl
 
 ```bash
 # create_petclinic.sh step is optional if completed in Cloud Shell
+wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O root.pem
+export PGSSLROOTCERT=root.pem
 ./create_petclinic.sh
 ./mvnw clean
 ./mvnw spring-boot:run
@@ -100,6 +104,8 @@ The code automatically detects the user type and adjusts its behavior accordingl
 
 ```bash
 # create_petclinic.bat step is optional if completed in Cloud Shell
+curl -o root.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
+set PGSSLROOTCERT=root.pem
 create_petclinic.bat
 gradlew.bat clean
 gradlew.bat bootRun
