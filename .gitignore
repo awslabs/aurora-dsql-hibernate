@@ -1,0 +1,6 @@
+**/*.iml
+classes/
+maven-status/
+test-classes/
+target/
+**/.gradle
