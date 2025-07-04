@@ -57,7 +57,8 @@ dependencies {
   testImplementation 'org.testcontainers:mysql'
   
   // AWS SDK deps
-  implementation group: 'software.amazon.awssdk', name: 'dsql', version: '2.31.33'
+  implementation 'software.amazon.awssdk:dsql:2.31.33'
+  implementation 'software.amazon.dsql:aurora-dsql-hibernate-dialect:1.0.0'
 
   implementation fileTree(dir: 'lib', includes: ['*.jar'])
 }
