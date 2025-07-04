@@ -41,7 +41,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-validation'
   implementation 'javax.cache:cache-api'
   implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
-  implementation 'software.amazon.dsql:aurora-dsql-hibernate-dialect:1.0.0'
+
   runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
   runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
   runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
@@ -58,7 +58,8 @@ dependencies {
   testImplementation 'org.testcontainers:mysql'
   
   // AWS SDK deps
-  implementation group: 'software.amazon.awssdk', name: 'dsql', version: '2.31.33'
+  implementation 'software.amazon.awssdk:dsql:2.31.33'
+  implementation 'software.amazon.dsql:aurora-dsql-hibernate-dialect:1.0.0'
 
   implementation fileTree(dir: 'lib', includes: ['*.jar'])
 }
