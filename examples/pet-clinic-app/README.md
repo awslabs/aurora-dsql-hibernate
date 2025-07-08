@@ -55,7 +55,7 @@ The code automatically detects the user type and adjusts its behavior accordingl
 
 ## Run the example
 
-# Cloud Shell DDL Setup (Optional)
+### Cloud Shell DDL Setup (Optional)
 
 1. Your IAM identity must have permission to [sign in AWS Management Console](https://docs.aws.amazon.com/signin/latest/userguide/console-sign-in-tutorials.html)
 2. Sign in to the AWS Management Console and open the Aurora DSQL console at <https://console.aws.amazon.com/dsql>
@@ -68,41 +68,57 @@ The code automatically detects the user type and adjusts its behavior accordingl
    - Copy Endpoint (Host)
 9. CloudShell Terminal
 
-   ```bash
-     export CLUSTER_ENDPOINT=<Paste endpoint>
-     export REGION=<Cluster region>
-     export CLUSTER_USER=admin
-     export CLUSTER_SCHEMA=postgres
-   
-      chmod +x create_petclinic.sh
-      ./create_petclinic.sh
-   ```
+```bash
+# Clone the entire repository
+git clone https://github.com/awslabs/aurora-dsql-hibernate.git
+# Change to the specific directory
+cd aurora-dsql-hibernate/examples/pet-clinic-app
+ export CLUSTER_ENDPOINT=<Paste endpoint>
+ export REGION=<Cluster region>
+ export CLUSTER_USER=admin
+ export CLUSTER_SCHEMA=postgres
 
-# Linux/Mac Gradle
+  chmod +x create_petclinic.sh
+  ./create_petclinic.sh
+```
+
+### Linux/Mac
+
+Execute the following commands to set up your environment, then choose either the Gradle or Maven build options below:
 
 ```bash
+# Clone the entire repository
+git clone https://github.com/awslabs/aurora-dsql-hibernate.git
+# Change to the specific directory
+cd aurora-dsql-hibernate/examples/pet-clinic-app
+
 # create_petclinic.sh step is optional if completed in Cloud Shell
+# Download the Amazon root certificate from the official trust store:
 wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O root.pem
 export PGSSLROOTCERT=root.pem
 ./create_petclinic.sh
+```
+
+#### Gradle build
+```bash
 ./gradlew clean
 ./gradlew bootRun
 ```
 
-# Linux/Mac Maven
+#### Maven build
 
 ```bash
-# create_petclinic.sh step is optional if completed in Cloud Shell
-wget https://www.amazontrust.com/repository/AmazonRootCA1.pem -O root.pem
-export PGSSLROOTCERT=root.pem
-./create_petclinic.sh
 ./mvnw clean
 ./mvnw spring-boot:run
 ```
 
-# Windows
+### Windows
 
 ```bash
+# Clone the entire repository
+git clone https://github.com/awslabs/aurora-dsql-hibernate.git
+# Change to the specific directory
+cd aurora-dsql-hibernate\examples\pet-clinic-app
 # create_petclinic.bat step is optional if completed in Cloud Shell
 curl -o root.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
 set PGSSLROOTCERT=root.pem
