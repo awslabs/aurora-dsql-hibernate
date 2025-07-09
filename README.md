@@ -1,5 +1,7 @@
 # Aurora DSQL Dialect for Hibernate
 
+<a href="https://central.sonatype.com/artifact/software.amazon.dsql/aurora-dsql-hibernate-dialect"><img alt="Maven Central Version" src="https://img.shields.io/maven-central/v/software.amazon.dsql/aurora-dsql-hibernate-dialect?style=for-the-badge"></a>
+
 ## Introduction
 
 The Aurora DSQL dialect for Hibernate provides integration between Hibernate ORM and Aurora DSQL. This dialect enables
