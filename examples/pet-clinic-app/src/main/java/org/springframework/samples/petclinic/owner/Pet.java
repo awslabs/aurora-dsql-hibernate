@@ -57,6 +57,9 @@ public class Pet extends NamedEntity {
 	@OrderBy("visit_date ASC")
 	private final Set<Visit> visits = new LinkedHashSet<>();
 
+	@Column
+	private double weight;
+
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -81,4 +84,11 @@ public class Pet extends NamedEntity {
 		getVisits().add(visit);
 	}
 
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
 }

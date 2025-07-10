@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Index;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.petclinic.model.Person;
 import org.springframework.util.Assert;
@@ -44,7 +45,8 @@ import jakarta.validation.constraints.NotBlank;
  * @author Oliver Drotbohm
  */
 @Entity
-@Table(name = "owners")
+@Table(name = "owners",
+		indexes = {@Index(name = "idx", columnList = "city")})
 public class Owner extends Person {
 
 	@Column(name = "address")
