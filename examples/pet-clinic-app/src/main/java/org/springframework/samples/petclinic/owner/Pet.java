@@ -91,4 +91,5 @@ public class Pet extends NamedEntity {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
 }

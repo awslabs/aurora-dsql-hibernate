@@ -45,8 +45,7 @@ import jakarta.validation.constraints.NotBlank;
  * @author Oliver Drotbohm
  */
 @Entity
-@Table(name = "owners",
-		indexes = {@Index(name = "idx", columnList = "city")})
+@Table(name = "owners", indexes = { @Index(name = "idx", columnList = "city") })
 public class Owner extends Person {
 
 	@Column(name = "address")
