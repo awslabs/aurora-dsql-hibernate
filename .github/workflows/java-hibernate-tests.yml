@@ -1,5 +1,7 @@
 name: Hibernate sample tests
 
+permissions: {}
+
 on:
   push:
     branches: [ main ]
@@ -24,13 +26,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: read
-      # Explicitly set permissions, following the principle of least privilege
-      actions: read
-      checks: write
-      pull-requests: write
-    
+      id-token: write # required by aws-actions/configure-aws-credentials
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
