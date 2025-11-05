@@ -1,6 +1,10 @@
 # Aurora DSQL Dialect for Hibernate
 
-<a href="https://central.sonatype.com/artifact/software.amazon.dsql/aurora-dsql-hibernate-dialect"><img alt="Maven Central Version" src="https://img.shields.io/maven-central/v/software.amazon.dsql/aurora-dsql-hibernate-dialect?style=for-the-badge"></a>
+[![GitHub](https://img.shields.io/badge/github-awslabs/aurora--dsql--hibernate-blue?logo=github)](https://github.com/awslabs/aurora-dsql-hibernate)
+[![License](https://img.shields.io/badge/license-Apache--2.0-brightgreen)](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/LICENSE.Apache-2.0)
+[![License](https://img.shields.io/badge/license-LGPL--2.1-brightgreen)](https://github.com/awslabs/aurora-dsql-hibernate/blob/main/LICENSE.LGPL-2.1)
+[![Maven Central Version](https://img.shields.io/maven-central/v/software.amazon.dsql/aurora-dsql-hibernate-dialect)](https://central.sonatype.com/artifact/software.amazon.dsql/aurora-dsql-hibernate-dialect)
+[![Discord chat](https://img.shields.io/discord/500028886025895936.svg?logo=discord)](https://discord.com/invite/nEF6ksFWru)
 
 ## Introduction
 
