@@ -2,19 +2,19 @@
 
 ## Overview
 
-This code example demonstrates how to use Hibernate (with pgJDBC and Hikari connection pool)
-with Amazon Aurora SQL (DSQL). The example shows you how to connect Hibernate to an Aurora DSQL cluster,
-performs a scheduled refresh of the DSQL token based password and perform basic database operations by leveraging the
-SpringPetClinic sample logic.
+This code example demonstrates how to use Hibernate with the Aurora DSQL JDBC Connector.
+The example shows you how to connect Hibernate to an Aurora DSQL cluster using HikariCP
+connection pooling and perform basic database operations by leveraging the SpringPetClinic
+sample logic.
 
 Aurora DSQL is a distributed SQL database service that provides high availability and scalability for
 your PostgreSQL-compatible applications.
 
-- `pgJDBC` is the official PostgreSQL adapter for Java that allows you to interact with PostgreSQL databases using Java code.
+- `Aurora DSQL JDBC Connector` handles IAM authentication automatically for Aurora DSQL clusters.
 
-- `HikariCP` is a popular Java connection pool that allows you to manage a pool of jdbc connection using Java code.
+- `HikariCP` is a popular Java connection pool that manages JDBC connections efficiently.
 
-- `Hibernate` is the most popular Object-Relational mapping frameowrk for Java that allows you to interact a variety of databases using Java code.
+- `Hibernate` is the most popular Object-Relational mapping framework for Java that allows you to interact with databases using Java code.
 
 ## ⚠️ Important
 
@@ -129,9 +129,9 @@ gradlew.bat bootRun
 
 # DSQL code examples
 
-## Setting Up Connection Properties and Generating DSQL Token
+## Setting Up Connection Properties
 
-To connect to the DSQL server, configure the username, URL endpoint, and password by setting the properties in `HikariDataSource` as shown below:
+The Aurora DSQL JDBC Connector handles IAM authentication automatically. Simply configure HikariCP with the connector's JDBC URL scheme:
 
 ```java
 package org.springframework.samples.petclinic.config;
@@ -142,39 +142,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.dsql.DsqlUtilities;
-import software.amazon.awssdk.services.dsql.model.GenerateAuthTokenRequest;
-
-import java.util.function.Consumer;
-import java.time.Duration;
 import java.util.logging.Logger;
 
 @Configuration(proxyBeanMethods = false)
-@EnableScheduling
 public class DsqlDataSourceConfig {
 
   final Logger logger = Logger.getLogger(this.toString());
 
-  @Value("${app.dsql.action:DB_CONNECT}")
-  private String action;
-
-  @Value("${app.dsql.region:US_EAST_1}")
-  private String region;
-
-  @Value("${app.dsql.token.refresh-rate:1800000}")
-  private long maxLifetime;
-
-  @Value("${app.dsql.username:admin}")
+  @Value("${app.datasource.username:admin}")
   private String username;
-
-  private HikariDataSource dataSource;
 
   @Bean
   @Primary
@@ -186,43 +165,21 @@ public class DsqlDataSourceConfig {
   @Bean
   public HikariDataSource dataSource(DataSourceProperties properties) {
     final HikariDataSource hds = properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
-    hds.setMaxLifetime(maxLifetime);
-    this.dataSource = hds;
+    hds.setMaxLifetime(3300000); // 55 minutes (connector handles token refresh)
     hds.setExceptionOverrideClassName(DsqlExceptionOverride.class.getName());
 
-    // set the password by generating token from credentials.
-    generateToken();
+    // Set the schema based on user type
+    if (!username.equals("admin")) {
+      hds.addDataSourceProperty("currentSchema", "myschema");
+      logger.info("Set schema to myschema");
+    }
+
     return hds;
   }
-
- @Scheduled(fixedRateString = "${app.dsql.token.refresh-interval:600000}")
-  public void generateToken() {
-    // Generate and set the DSQL token
-    final DsqlUtilities utilities = DsqlUtilities.builder()
-            .region(Region.of(region.toLowerCase()))
-            .credentialsProvider(ProfileCredentialsProvider.create())
-            .build();
-
-    final Consumer<GenerateAuthTokenRequest.Builder> requester =
-            builder -> builder.hostname(dataSource.getJdbcUrl().split("/")[2])
-                    .region(Region.of(region))
-                    .expiresIn(Duration.ofMillis(maxLifetime)); // Default is 900 seconds
-
-    // Use auth method according to the current user. The admin user is assumed to be "admin".
-    final String token = username.equals("admin")
-            ? utilities.generateDbConnectAdminAuthToken(requester)
-            : utilities.generateDbConnectAuthToken(requester);
-
-
-    dataSource.setPassword(token);
-    logger.info("Generated DSQL token");
-  }
 }
-
 ```
 
-The token is generated using AWS credentials and is set to expire after a certain duration.
-This sample handles token expiration and regeneration in application logic to maintain a valid connection to the DSQL server on a scheduled interval.
+The connector generates IAM tokens automatically when connections are created. No manual token refresh is needed.
 
 ## Using UUID as Primary Key
 

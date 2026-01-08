@@ -27,9 +27,6 @@
     <webjars-bootstrap.version>5.3.3</webjars-bootstrap.version>
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
-    <!-- AWS SDK version -->
-    <aws.sdk.version>2.31.39</aws.sdk.version>
-
     <checkstyle.version>10.18.1</checkstyle.version>
     <jacoco.version>0.8.12</jacoco.version>
     <libsass.version>0.2.29</libsass.version>
@@ -94,6 +91,11 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.dsql</groupId>
+      <artifactId>aurora-dsql-jdbc-connector</artifactId>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>software.amazon.dsql</groupId>
@@ -166,37 +168,6 @@
       <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
 
-    <!-- AWS SDK dependencies -->
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>regions</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>sts</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>aws-core</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>aws-json-protocol</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>url-connection-client</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>dsql</artifactId>
-      <version>${aws.sdk.version}</version>
-    </dependency>
   </dependencies>
 
   <build>

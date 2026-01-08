@@ -68,3 +68,12 @@ jobs:
         mvn initialize
         mvn clean compile
         mvn test
+
+    - name: Run DSQL integration test
+      working-directory: ./examples/pet-clinic-app
+      env:
+        CLUSTER_ENDPOINT: ${{ secrets.HIBERNATE_DIALECT_INTEGRATION_CLUSTER_ENDPOINT }}
+        CLUSTER_USER: admin
+        RUN_INTEGRATION: "TRUE"
+      run: |
+        mvn test -Dtest=DsqlIntegrationTest
