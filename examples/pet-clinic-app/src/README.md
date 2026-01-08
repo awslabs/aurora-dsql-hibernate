@@ -2,7 +2,7 @@
 
 
 Below are the list of changes added :
-1. How to connect to DSQL with sample token generator code using DSQL libraries and a scheduled token refresh.
+1. How to connect to DSQL using the Aurora DSQL JDBC Connector for automatic IAM authentication.
 2. How to use UUID in place of IDENTITY as primary key. 
 3. A Retry Aspect sample class on how to retry on Errors/Exceptions. 
 4. A connection eviction override sample class on How to override connection eviction logic to handle DSQL supported/unsupported errors and exceptions.
@@ -58,18 +58,14 @@ There is no `Dockerfile` in this project. You can build a container image (if yo
 Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
 
 ## Database configuration
-DsqlDataSourceConfig takes care of connecting the app with DSQL server based on application.properties file configurations.
-Provide the username, region, URL ands DSQL action into application.properties file as shown below with sample example.
+DsqlDataSourceConfig takes care of connecting the app with DSQL server based on application-dsql.properties file configurations.
+The Aurora DSQL JDBC Connector handles IAM authentication automatically.
 
 ```
-# Dsql DataSource Configuration
-# - Default region is us-east-1
-app.dsql.region=us-east-1
-# - Cluster endpoint format : jdbc:postgresql://<endpoint-url>/postgres?ssl=verify-full
-app.datasource.url=jdbc:postgresql://<cluster_dns>/postgres?ssl=verify-full
-# Update username for non-admin user here
+# Aurora DSQL JDBC Connector handles IAM authentication automatically
+app.datasource.url=jdbc:aws-dsql:postgresql://<cluster_endpoint>/postgres
 app.datasource.username=admin
-
+app.datasource.hikari.data-source-properties.ApplicationName=hibernate
 ```
 
 ## Test Applications
